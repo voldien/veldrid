@@ -70,6 +70,10 @@ namespace Veldrid.Vk
             if (DepthTarget != null)
             {
                 VkTexture vkDepthTex = Util.AssertSubtype<Texture, VkTexture>(DepthTarget.Value.Target);
+
+                if(!_gd.GetPixelFormatSupport(vkDepthTex.Format, vkDepthTex.Type, TextureUsage.DepthStencil))
+                    throw new VeldridException("Invalid depth format attachment: {DepthTarget.Value.Target.Format}");
+
                 bool hasStencil = FormatHelpers.IsStencilFormat(vkDepthTex.Format);
                 depthAttachmentDesc.format = vkDepthTex.VkFormat;
                 depthAttachmentDesc.samples = vkDepthTex.VkSampleCount;
